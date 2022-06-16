@@ -433,7 +433,6 @@ class NetworkTrainer(object):
 
         if not self.was_initialized:
             self.initialize(True)
-
         while self.epoch < self.max_num_epochs:
             self.print_to_log_file("\nepoch: ", self.epoch)
             epoch_start_time = time()
@@ -455,7 +454,6 @@ class NetworkTrainer(object):
                 for _ in range(self.num_batches_per_epoch):
                     l = self.run_iteration(self.tr_gen, True)
                     train_losses_epoch.append(l)
-
             self.all_tr_losses.append(np.mean(train_losses_epoch))
             self.print_to_log_file("train loss : %.4f" % self.all_tr_losses[-1])
 

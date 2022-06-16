@@ -175,40 +175,40 @@ def determine_postprocessing(base, gt_labels_folder, raw_subfolder_name="validat
     pp_results['num_samples'] = len(validation_result_raw['all'])
     validation_result_raw = validation_result_raw['mean']
 
-    if advanced_postprocessing:
-        # first treat all foreground classes as one and remove all but the largest foreground connected component
-        results = []
-        for f in fnames:
-            predicted_segmentation = join(base, raw_subfolder_name, f)
-            # now remove all but the largest connected component for each class
-            output_file = join(folder_all_classes_as_fg, f)
-            results.append(p.starmap_async(load_remove_save, ((predicted_segmentation, output_file, (classes,)),)))
-
-        results = [i.get() for i in results]
-
-        # aggregate max_size_removed and min_size_kept
-        max_size_removed = {}
-        min_size_kept = {}
-        for tmp in results:
-            mx_rem, min_kept = tmp[0]
-            for k in mx_rem:
-                if mx_rem[k] is not None:
-                    if max_size_removed.get(k) is None:
-                        max_size_removed[k] = mx_rem[k]
-                    else:
-                        max_size_removed[k] = max(max_size_removed[k], mx_rem[k])
-            for k in min_kept:
-                if min_kept[k] is not None:
-                    if min_size_kept.get(k) is None:
-                        min_size_kept[k] = min_kept[k]
-                    else:
-                        min_size_kept[k] = min(min_size_kept[k], min_kept[k])
-
-        print("foreground vs background, smallest valid object size was", min_size_kept[tuple(classes)])
-        print("removing only objects smaller than that...")
-
-    else:
-        min_size_kept = None
+    # if advanced_postprocessing:
+    #     # first treat all foreground classes as one and remove all but the largest foreground connected component
+    #     results = []
+    #     for f in fnames:
+    #         predicted_segmentation = join(base, raw_subfolder_name, f)
+    #         # now remove all but the largest connected component for each class
+    #         output_file = join(folder_all_classes_as_fg, f)
+    #         results.append(p.starmap_async(load_remove_save, ((predicted_segmentation, output_file, (classes,)),)))
+    #
+    #     results = [i.get() for i in results]
+    #
+    #     # aggregate max_size_removed and min_size_kept
+    #     max_size_removed = {}
+    #     min_size_kept = {}
+    #     for tmp in results:
+    #         mx_rem, min_kept = tmp[0]
+    #         for k in mx_rem:
+    #             if mx_rem[k] is not None:
+    #                 if max_size_removed.get(k) is None:
+    #                     max_size_removed[k] = mx_rem[k]
+    #                 else:
+    #                     max_size_removed[k] = max(max_size_removed[k], mx_rem[k])
+    #         for k in min_kept:
+    #             if min_kept[k] is not None:
+    #                 if min_size_kept.get(k) is None:
+    #                     min_size_kept[k] = min_kept[k]
+    #                 else:
+    #                     min_size_kept[k] = min(min_size_kept[k], min_kept[k])
+    #
+    #     print("foreground vs background, smallest valid object size was", min_size_kept[tuple(classes)])
+    #     print("removing only objects smaller than that...")
+    #
+    # else:
+    min_size_kept = None
 
     # we need to rerun the step from above, now with the size constraint
     pred_gt_tuples = []
@@ -275,39 +275,39 @@ def determine_postprocessing(base, gt_labels_folder, raw_subfolder_name="validat
         else:
             source = join(base, raw_subfolder_name)
 
-        if advanced_postprocessing:
-            # now run this for each class separately
-            results = []
-            for f in fnames:
-                predicted_segmentation = join(source, f)
-                output_file = join(folder_per_class, f)
-                results.append(p.starmap_async(load_remove_save, ((predicted_segmentation, output_file, classes),)))
-
-            results = [i.get() for i in results]
-
-            # aggregate max_size_removed and min_size_kept
-            max_size_removed = {}
-            min_size_kept = {}
-            for tmp in results:
-                mx_rem, min_kept = tmp[0]
-                for k in mx_rem:
-                    if mx_rem[k] is not None:
-                        if max_size_removed.get(k) is None:
-                            max_size_removed[k] = mx_rem[k]
-                        else:
-                            max_size_removed[k] = max(max_size_removed[k], mx_rem[k])
-                for k in min_kept:
-                    if min_kept[k] is not None:
-                        if min_size_kept.get(k) is None:
-                            min_size_kept[k] = min_kept[k]
-                        else:
-                            min_size_kept[k] = min(min_size_kept[k], min_kept[k])
-
-            print("classes treated separately, smallest valid object sizes are")
-            print(min_size_kept)
-            print("removing only objects smaller than that")
-        else:
-            min_size_kept = None
+        # if advanced_postprocessing:
+        #     # now run this for each class separately
+        #     results = []
+        #     for f in fnames:
+        #         predicted_segmentation = join(source, f)
+        #         output_file = join(folder_per_class, f)
+        #         results.append(p.starmap_async(load_remove_save, ((predicted_segmentation, output_file, classes),)))
+        #
+        #     results = [i.get() for i in results]
+        #
+        #     # aggregate max_size_removed and min_size_kept
+        #     max_size_removed = {}
+        #     min_size_kept = {}
+        #     for tmp in results:
+        #         mx_rem, min_kept = tmp[0]
+        #         for k in mx_rem:
+        #             if mx_rem[k] is not None:
+        #                 if max_size_removed.get(k) is None:
+        #                     max_size_removed[k] = mx_rem[k]
+        #                 else:
+        #                     max_size_removed[k] = max(max_size_removed[k], mx_rem[k])
+        #         for k in min_kept:
+        #             if min_kept[k] is not None:
+        #                 if min_size_kept.get(k) is None:
+        #                     min_size_kept[k] = min_kept[k]
+        #                 else:
+        #                     min_size_kept[k] = min(min_size_kept[k], min_kept[k])
+        #
+        #     print("classes treated separately, smallest valid object sizes are")
+        #     print(min_size_kept)
+        #     print("removing only objects smaller than that")
+        # else:
+        min_size_kept = None
 
         # rerun with the size thresholds from above
         pred_gt_tuples = []

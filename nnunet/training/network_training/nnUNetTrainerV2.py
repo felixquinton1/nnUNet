@@ -67,7 +67,6 @@ class nnUNetTrainerV2(nnUNetTrainer):
 
             if force_load_plans or (self.plans is None):
                 self.load_plans_file()
-
             self.process_plans(self.plans)
 
             self.setup_DA_params()
@@ -121,7 +120,7 @@ class nnUNetTrainerV2(nnUNetTrainer):
             self.initialize_network()
             self.initialize_optimizer_and_scheduler()
 
-            assert isinstance(self.network, (SegmentationNetwork, nn.DataParallel))
+            # assert isinstance(self.network, (SegmentationNetwork, nn.DataParallel))
         else:
             self.print_to_log_file('self.was_initialized is True, not running self.initialize again')
         self.was_initialized = True
@@ -157,6 +156,7 @@ class nnUNetTrainerV2(nnUNetTrainer):
                                     dropout_op_kwargs,
                                     net_nonlin, net_nonlin_kwargs, True, False, lambda x: x, InitWeights_He(1e-2),
                                     self.net_num_pool_op_kernel_sizes, self.net_conv_kernel_sizes, False, True, True)
+
         if torch.cuda.is_available():
             self.network.cuda()
         self.network.inference_apply_nonlin = softmax_helper
@@ -235,7 +235,6 @@ class nnUNetTrainerV2(nnUNetTrainer):
 
         data = maybe_to_torch(data)
         target = maybe_to_torch(target)
-
         if torch.cuda.is_available():
             data = to_cuda(data)
             target = to_cuda(target)
@@ -436,6 +435,7 @@ class nnUNetTrainerV2(nnUNetTrainer):
         self.maybe_update_lr(self.epoch)  # if we dont overwrite epoch then self.epoch+1 is used which is not what we
         # want at the start of the training
         ds = self.network.do_ds
+        # ds=True
         self.network.do_ds = True
         ret = super().run_training()
         self.network.do_ds = ds

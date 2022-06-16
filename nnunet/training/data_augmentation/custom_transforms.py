@@ -48,6 +48,7 @@ class MaskTransform(AbstractTransform):
         if seg is None or seg.shape[1] < self.mask_idx_in_seg:
             raise Warning("mask not found, seg may be missing or seg[:, mask_idx_in_seg] may not exist")
         data = data_dict.get(self.data_key)
+        save = data
         for b in range(data.shape[0]):
             mask = seg[b, self.mask_idx_in_seg]
             for c in range(data.shape[1]):
