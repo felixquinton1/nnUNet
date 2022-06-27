@@ -1,0 +1,30 @@
+{
+    "os": "Linux-5.4.0-96-generic-x86_64-with-glibc2.10",
+    "python": "3.8.5",
+    "heartbeatAt": "2022-06-27T12:15:29.906136",
+    "startedAt": "2022-06-27T12:15:26.653857",
+    "docker": null,
+    "gpu": "Tesla V100-DGXS-32GB",
+    "gpu_count": 4,
+    "cpu_count": 40,
+    "cuda": null,
+    "args": [
+        "3d_fullres",
+        "nnUNetTrainerV2",
+        "Task500_LiverTumour",
+        "0",
+        "--npz"
+    ],
+    "state": "running",
+    "program": "run/run_training.py",
+    "codePath": "nnunet/run/run_training.py",
+    "git": {
+        "remote": "git@github.com:felixquinton1/nnUNet.git",
+        "commit": "f326038f7959da182ca5e68c392c1c791354a4e1"
+    },
+    "email": "sarah.leclerc@u-bourgogne.fr",
+    "root": "/raid/Home/Users/sleclerc/nnUNet",
+    "host": "mesodgx",
+    "username": "sleclerc",
+    "executable": "/Home/Users/sleclerc/.conda/envs/tensorflowGPU/bin/python"
+}
