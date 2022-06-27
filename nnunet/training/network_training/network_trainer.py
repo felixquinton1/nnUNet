@@ -16,6 +16,7 @@
 from _warnings import warn
 from typing import Tuple
 
+import wandb
 import matplotlib
 from batchgenerators.utilities.file_and_folder_operations import *
 from nnunet.network_architecture.neural_network import SegmentationNetwork
@@ -451,10 +452,25 @@ class NetworkTrainer(object):
                         tbar.set_postfix(loss=l)
                         train_losses_epoch.append(l)
             else:
+                s_time = time()
+                timer = [0,0,0,0]
                 for _ in range(self.num_batches_per_epoch):
-                    l = self.run_iteration(self.tr_gen, True)
+                    l, timer_batch = self.run_iteration(self.tr_gen, True)
+                    timer[0] += timer_batch[0]
+                    timer[1] += timer_batch[1]
+                    timer[2] += timer_batch[2]
+                    timer[3] += timer_batch[3]
                     train_losses_epoch.append(l)
+                f_time = time()
+                print('time {:.2f}s'.format(f_time - s_time),
+                      'load time {:.2f}s'.format(timer[0]),
+                      'time_before_calc {:.2f}s'.format(timer[1]),
+                      'calc time {:.2f}s'.format(timer[2]),
+                      'back time {:.2f}s'.format(timer[3]),
+                      )
             self.all_tr_losses.append(np.mean(train_losses_epoch))
+            wandb.log({'train loss': np.mean(train_losses_epoch), 'epoch': self.epoch})
+
             self.print_to_log_file("train loss : %.4f" % self.all_tr_losses[-1])
 
             with torch.no_grad():
@@ -462,9 +478,10 @@ class NetworkTrainer(object):
                 self.network.eval()
                 val_losses = []
                 for b in range(self.num_val_batches_per_epoch):
-                    l = self.run_iteration(self.val_gen, False, True)
+                    l,  timer = self.run_iteration(self.val_gen, False, True)
                     val_losses.append(l)
                 self.all_val_losses.append(np.mean(val_losses))
+                wandb.log({'val_loss': np.mean(train_losses_epoch), 'epoch': self.epoch})
                 self.print_to_log_file("validation loss: %.4f" % self.all_val_losses[-1])
 
                 if self.also_val_in_tr_mode:
