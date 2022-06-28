@@ -455,6 +455,7 @@ class NetworkTrainer(object):
                 s_time = time()
                 timer = [0,0,0,0]
                 for _ in range(self.num_batches_per_epoch):
+                # for _ in range(10):
                     l, timer_batch = self.run_iteration(self.tr_gen, True)
                     timer[0] += timer_batch[0]
                     timer[1] += timer_batch[1]
@@ -469,7 +470,7 @@ class NetworkTrainer(object):
                       'back time {:.2f}s'.format(timer[3]),
                       )
             self.all_tr_losses.append(np.mean(train_losses_epoch))
-            wandb.log({'train loss': np.mean(train_losses_epoch), 'epoch': self.epoch})
+            wandb.log({'train loss': np.mean(train_losses_epoch), 'epoch': self.epoch + 1})
 
             self.print_to_log_file("train loss : %.4f" % self.all_tr_losses[-1])
 
@@ -481,7 +482,7 @@ class NetworkTrainer(object):
                     l,  timer = self.run_iteration(self.val_gen, False, True)
                     val_losses.append(l)
                 self.all_val_losses.append(np.mean(val_losses))
-                wandb.log({'val_loss': np.mean(train_losses_epoch), 'epoch': self.epoch})
+                wandb.log({'val_loss': np.mean(val_losses), 'epoch': self.epoch + 1})
                 self.print_to_log_file("validation loss: %.4f" % self.all_val_losses[-1])
 
                 if self.also_val_in_tr_mode:
