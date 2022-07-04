@@ -68,6 +68,7 @@ class nnUNetTrainerV2(nnUNetTrainer):
 
             if force_load_plans or (self.plans is None):
                 self.load_plans_file()
+            # self.plans['plans_per_stage']['plans_per_stage']['patch_size'] = 1
             self.process_plans(self.plans)
 
             self.setup_DA_params()
@@ -379,6 +380,7 @@ class nnUNetTrainerV2(nnUNetTrainer):
                                                              self.data_aug_params['rotation_y'],
                                                              self.data_aug_params['rotation_z'],
                                                              self.data_aug_params['scale_range'])
+            # self.basic_generator_patch_size = np.array((160,224), dtype=int)
             self.basic_generator_patch_size = np.array([self.patch_size[0]] + list(self.basic_generator_patch_size))
         else:
             self.basic_generator_patch_size = get_patch_size(self.patch_size, self.data_aug_params['rotation_x'],

@@ -62,9 +62,9 @@ def get_moreDA_augmentation(dataloader_train, dataloader_val, patch_size, params
     else:
         patch_size_spatial = patch_size
         ignore_axes = None
-    params['do_elastic'] = False
-    params['do_rotation'] = False
-    params['do_scaling'] = False
+    # params['do_elastic'] = False
+    # params['do_rotation'] = False
+    # params['do_scaling'] = False
     tr_transforms.append(SpatialTransform(
         patch_size_spatial, patch_center_dist_from_border=None,
         do_elastic_deform=params.get("do_elastic"), alpha=params.get("elastic_deform_alpha"),
@@ -141,8 +141,8 @@ def get_moreDA_augmentation(dataloader_train, dataloader_val, patch_size, params
 
     tr_transforms.append(RenameTransform('seg', 'target', True))
 
-    # if regions is not None:
-    #     tr_transforms.append(ConvertSegmentationToRegionsTransform(regions, 'target', 'target'))
+    if regions is not None:
+        tr_transforms.append(ConvertSegmentationToRegionsTransform(regions, 'target', 'target'))
 
     if deep_supervision_scales is not None:
         if soft_ds:
