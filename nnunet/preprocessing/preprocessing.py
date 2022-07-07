@@ -246,9 +246,9 @@ class GenericPreprocessor(object):
         # remove nans
         data[np.isnan(data)] = 0
 
-        # data, seg = resample_patient(data, seg, np.array(original_spacing_transposed), target_spacing, 3, 1,
-        #                              force_separate_z=force_separate_z, order_z_data=0, order_z_seg=0,
-        #                              separate_z_anisotropy_threshold=self.resample_separate_z_anisotropy_threshold)
+        data, seg = resample_patient(data, seg, np.array(original_spacing_transposed), target_spacing, 3, 1,
+                                     force_separate_z=force_separate_z, order_z_data=0, order_z_seg=0,
+                                     separate_z_anisotropy_threshold=self.resample_separate_z_anisotropy_threshold)
         after = {
             'spacing': target_spacing,
             'data.shape (data is resampled)': data.shape
@@ -302,10 +302,10 @@ class GenericPreprocessor(object):
                     data[c][mask == 0] = 0
                 else:
                     pass
-                    # mn = data[c].mean()
-                    # std = data[c].std()
-                    # # print(data[c].shape, data[c].dtype, mn, std)
-                    # data[c] = (data[c] - mn) / (std + 1e-8)
+                    mn = data[c].mean()
+                    std = data[c].std()
+                    # print(data[c].shape, data[c].dtype, mn, std)
+                    data[c] = (data[c] - mn) / (std + 1e-8)
         return data, seg, properties
 
     def preprocess_test_case(self, data_files, target_spacing, seg_file=None, force_separate_z=None):

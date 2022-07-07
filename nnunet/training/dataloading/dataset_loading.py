@@ -228,11 +228,11 @@ class DataLoader3D(SlimDataLoaderBase):
         for j, i in enumerate(selected_keys):
             # oversampling foreground will improve stability of model training, especially if many patches are empty
             # (Lung for example)
-            # if self.get_do_oversample(j):
-            #     force_fg = True
-            # else:
-            #     force_fg = False
-            force_fg = False
+            if self.get_do_oversample(j):
+                force_fg = True
+            else:
+                force_fg = False
+            # force_fg = False
             if 'properties' in self._data[i].keys():
                 properties = self._data[i]['properties']
             else:
