@@ -35,13 +35,13 @@ network_training_output_dir_base = os.path.join(os.environ['RESULTS_FOLDER']) if
 # preprocessing_output_dir = '/raid/Home/Users/sleclerc/db_nnunet/nnUNet_preprocessed'
 # network_training_output_dir_base = '/raid/Home/Users/sleclerc/db_nnunet/nnUNet_trained_models'
 
-# base = '/work/imvia/sa6275le/db_test/db_nnunet/nnUNet_raw_data_base'
-# preprocessing_output_dir = '/work/imvia/sa6275le/db_test/db_nnunet/nnUNet_preprocessed'
-# network_training_output_dir_base = '/work/imvia/sa6275le/db_test/db_nnunet/nnUNet_trained_models'
+base = '/work/imvia/sa6275le/db_test/db_nnunet/nnUNet_raw_data_base'
+preprocessing_output_dir = '/work/imvia/sa6275le/db_test/db_nnunet/nnUNet_preprocessed'
+network_training_output_dir_base = '/work/imvia/sa6275le/db_test/db_nnunet/nnUNet_trained_models'
 
-base = '/home/felix/Bureau/db_nnunet/nnUNet_raw_data_base'
-preprocessing_output_dir = '/home/felix/Bureau/db_nnunet/nnUNet_preprocessed'
-network_training_output_dir_base = '/home/felix/Bureau/db_nnunet/nnUNet_trained_models'
+# base = '/home/felix/Bureau/db_nnunet/nnUNet_raw_data_base'
+# preprocessing_output_dir = '/home/felix/Bureau/db_nnunet/nnUNet_preprocessed'
+# network_training_output_dir_base = '/home/felix/Bureau/db_nnunet/nnUNet_trained_models'
 if base is not None:
     nnUNet_raw_data = join(base, "nnUNet_raw_data")
     nnUNet_cropped_data = join(base, "nnUNet_cropped_data")
